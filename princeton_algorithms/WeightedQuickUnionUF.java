@@ -1,11 +1,13 @@
 package princeton_algorithms;
 
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
+
 public class WeightedQuickUnionUF {
 	
 	private int[] parent;
 	private int[] size;
 	private int count;
-	
 	
 	//weighted quick union includes size of each tree and attaches smaller tree (assigns index)
 	//to larger tree!
@@ -18,6 +20,10 @@ public class WeightedQuickUnionUF {
 			parent[i] = i;
 			size[i] = 1;
 		}
+	}
+	
+	public int count() {
+		return count;
 	}
 	
 	//verify that p is a valid index
@@ -37,24 +43,37 @@ public class WeightedQuickUnionUF {
 	}
 	
 	public void union(int p, int q) {
-		validate(p);
-		validate(q);
 		int rootP = find(p);
 		int rootQ = find(q);
-		if(rootP!=rootQ) {
-			if(rootP < rootQ){
-				parent[p] = q;
-				size[q] += size[p];
-			}
-			if(rootQ < rootP){
-				parent[q] = p;
-				size[p] += size[q];
-			}
+		if(rootP == rootQ) {
+			return;
 		}
+		if(size[rootP] < size[rootQ]){
+			parent[rootP] = rootQ;
+			size[rootQ] += size[rootP];
+		}
+		if(size[rootQ] < size[rootP]){
+				parent[rootQ] = rootP;
+				size[rootP] += size[rootQ];
+		}
+		count--;
 	}
 	
 	public boolean connected(int p, int q) {
 		return find(p) == find(q);
 	}
+	
+	public static void main(String[] args) {
+        int n = StdIn.readInt();
+        WeightedQuickUnionUF uf = new WeightedQuickUnionUF(n);
+        while (!StdIn.isEmpty()) {
+            int p = StdIn.readInt();
+            int q = StdIn.readInt();
+            if (uf.find(p) == uf.find(q)) continue;
+            uf.union(p, q);
+            StdOut.println(p + " " + q);
+        }
+        StdOut.println(uf.count() + " components");
+    }
 	
 }

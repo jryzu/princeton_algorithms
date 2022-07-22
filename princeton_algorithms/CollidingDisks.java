@@ -1,3 +1,4 @@
+package princeton_algorithms;
 /******************************************************************************
  *  Compilation:  javac-algs4 CollidingDisks.java
  *  Execution:    java-algs4 CollidingDisks n
